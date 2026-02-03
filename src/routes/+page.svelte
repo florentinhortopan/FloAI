@@ -26,6 +26,14 @@
 		{#if !selectedIntent}
 			<div class="max-w-4xl mx-auto text-center space-y-8">
 				<div class="space-y-4 animate-fade-in">
+					<div class="flex justify-end mb-4">
+						<a
+							href="/admin"
+							class="px-4 py-2 text-sm bg-white dark:bg-slate-800 rounded-lg shadow hover:shadow-md transition-shadow text-foreground"
+						>
+							📊 Admin Dashboard
+						</a>
+					</div>
 					<h1 class="text-5xl md:text-6xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
 						FloAI
 					</h1>
