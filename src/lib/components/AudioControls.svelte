@@ -7,15 +7,16 @@
 	const dispatch = createEventDispatcher();
 </script>
 
-<div class="flex items-center space-x-2">
+<!-- High contrast audio controls - WordPress.com style -->
+<div class="flex items-center gap-2">
 	<button
 		on:click={() => dispatch('toggle')}
 		disabled={disabled}
-		class="p-3 rounded-lg {
+		class="p-3 rounded-md border-2 transition-all {
 			isListening
-				? 'bg-red-500 hover:bg-red-600 text-white'
-				: 'bg-slate-200 hover:bg-slate-300 dark:bg-slate-700 dark:hover:bg-slate-600'
-		} transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+				? 'bg-destructive text-destructive-foreground border-destructive shadow-md'
+				: 'bg-card text-card-foreground border-border hover:border-primary hover:bg-primary/5'
+		} disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:border-border disabled:hover:bg-card"
 		aria-label={isListening ? 'Stop listening' : 'Start voice input'}
 	>
 		<svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
@@ -38,7 +39,7 @@
 	<button
 		on:click={() => dispatch('send')}
 		disabled={disabled}
-		class="p-3 rounded-lg bg-blue-600 hover:bg-blue-700 text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+		class="p-3 rounded-md bg-primary text-primary-foreground border-2 border-primary hover:bg-primary-hover shadow-md transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-primary"
 		aria-label="Send message"
 	>
 		<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

@@ -6,30 +6,26 @@
 
 	const dispatch = createEventDispatcher<{ select: Intent }>();
 
-	const intents: Array<{ id: Intent; title: string; icon: string; color: string }> = [
+	const intents: Array<{ id: Intent; title: string; icon: string }> = [
 		{
 			id: 'hire',
 			title: 'Hire Flo',
-			icon: '💼',
-			color: 'from-blue-500 to-cyan-500'
+			icon: '💼'
 		},
 		{
 			id: 'partner',
 			title: 'Partner',
-			icon: '🤝',
-			color: 'from-purple-500 to-pink-500'
+			icon: '🤝'
 		},
 		{
 			id: 'fun',
 			title: 'Just Chat',
-			icon: '🎉',
-			color: 'from-orange-500 to-red-500'
+			icon: '🎉'
 		},
 		{
 			id: 'newsletter',
 			title: 'Newsletter',
-			icon: '📧',
-			color: 'from-green-500 to-emerald-500'
+			icon: '📧'
 		}
 	];
 
@@ -38,14 +34,15 @@
 	}
 </script>
 
+<!-- High contrast intent buttons - WordPress.com style -->
 <div class="flex flex-wrap gap-2 justify-center">
 	{#each intents as intent}
 		<button
 			on:click={() => selectIntent(intent.id)}
-			class="px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 transform hover:scale-105 {
+			class="px-4 py-2 rounded-md text-sm font-semibold transition-all duration-200 border-2 {
 				currentIntent === intent.id
-					? 'bg-gradient-to-r ' + intent.color + ' text-white shadow-lg'
-					: 'bg-white dark:bg-slate-800 text-foreground border border-border hover:shadow-md'
+					? 'bg-primary text-primary-foreground border-primary shadow-md'
+					: 'bg-card text-card-foreground border-border hover:border-primary hover:bg-primary/5'
 			}"
 		>
 			<span class="mr-2">{intent.icon}</span>

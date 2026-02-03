@@ -219,22 +219,23 @@
 
 </script>
 
+<!-- High contrast WordPress.com-inspired chat interface -->
 <div class="max-w-4xl mx-auto">
-	<div class="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl overflow-hidden">
-		<!-- Header -->
-		<div class="bg-gradient-to-r from-blue-600 to-indigo-600 p-6">
+	<div class="bg-card border border-border rounded-lg shadow-lg overflow-hidden">
+		<!-- Header - High contrast, bold -->
+		<div class="bg-primary text-primary-foreground px-6 py-4 border-b border-primary/20">
 			<div class="flex items-center justify-between mb-4">
 				<div>
-					<h2 class="text-xl font-bold text-white">FloAI</h2>
-					<p class="text-blue-100 text-sm">Session: {sessionId?.substring(0, 8)}</p>
+					<h2 class="text-xl font-bold">FloAI Assistant</h2>
+					<p class="text-sm opacity-90">Session: {sessionId?.substring(0, 8)}</p>
 				</div>
 			</div>
 			<!-- Intent Selection CTAs -->
 			<IntentCTAs {currentIntent} on:select={handleIntentSelect} />
 		</div>
 
-		<!-- Messages -->
-		<div class="h-[600px] overflow-y-auto p-6 space-y-4 bg-slate-50 dark:bg-slate-900">
+		<!-- Messages - High contrast background -->
+		<div class="h-[600px] overflow-y-auto p-6 space-y-4 bg-background">
 			{#each messages as message (message.id)}
 				<MessageBubble {message} />
 				{#if message.role === 'assistant' && message.id === messages[0]?.id}
@@ -246,20 +247,20 @@
 			{/each}
 			{#if isLoading}
 				<div class="flex items-center space-x-2 text-muted-foreground">
-					<div class="w-2 h-2 bg-blue-500 rounded-full animate-bounce"></div>
-					<div class="w-2 h-2 bg-blue-500 rounded-full animate-bounce" style="animation-delay: 0.2s"></div>
-					<div class="w-2 h-2 bg-blue-500 rounded-full animate-bounce" style="animation-delay: 0.4s"></div>
+					<div class="w-2 h-2 bg-primary rounded-full animate-bounce"></div>
+					<div class="w-2 h-2 bg-primary rounded-full animate-bounce" style="animation-delay: 0.2s"></div>
+					<div class="w-2 h-2 bg-primary rounded-full animate-bounce" style="animation-delay: 0.4s"></div>
 				</div>
 			{/if}
 		</div>
 
-		<!-- Input Area -->
-		<div class="p-6 border-t border-border bg-white dark:bg-slate-800">
+		<!-- Input Area - High contrast border -->
+		<div class="p-6 border-t-2 border-border bg-card">
 			{#if selectedIntent === 'hire'}
-				<div class="mb-2 flex items-center gap-2">
+				<div class="mb-3 flex items-center gap-3">
 					<label
 						for="file-upload"
-						class="px-3 py-1 text-sm bg-slate-100 dark:bg-slate-700 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-600 cursor-pointer transition-colors"
+						class="px-4 py-2 text-sm font-medium bg-secondary text-secondary-foreground rounded-md hover:bg-secondary/80 cursor-pointer transition-colors border border-border"
 					>
 						{uploadingFile ? 'Uploading...' : '📎 Upload PDF/DOCX'}
 					</label>
@@ -272,10 +273,10 @@
 						class="hidden"
 						disabled={uploadingFile || isLoading}
 					/>
-					<span class="text-xs text-muted-foreground">or paste a job URL or description</span>
+					<span class="text-xs text-muted-foreground font-medium">or paste a job URL or description</span>
 				</div>
 			{/if}
-			<div class="flex items-end space-x-4">
+			<div class="flex items-end gap-3">
 				<div class="flex-1 relative">
 					<textarea
 						bind:value={inputText}
@@ -290,7 +291,7 @@
 								? 'Paste job description, URL, or upload a file...'
 								: 'Type your message or use voice input...'
 						}
-						class="w-full px-4 py-3 rounded-lg border border-input bg-background resize-none focus:outline-none focus:ring-2 focus:ring-ring"
+						class="w-full px-4 py-3 rounded-md border-2 border-input bg-background text-foreground resize-none focus:outline-none focus:border-ring focus:ring-2 focus:ring-ring/20 transition-all"
 						rows="2"
 						disabled={isLoading || uploadingFile}
 					></textarea>

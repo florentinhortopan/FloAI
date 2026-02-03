@@ -10,12 +10,15 @@
 	});
 </script>
 
-<div class="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
-	<div class="container mx-auto px-4 py-8">
-		<div class="flex justify-end mb-4">
+<!-- High contrast WordPress.com-inspired design -->
+<div class="min-h-screen bg-background">
+	<div class="container mx-auto px-4 py-8 max-w-6xl">
+		<!-- Header with admin link - high contrast -->
+		<div class="flex justify-between items-center mb-8 border-b border-border pb-4">
+			<h1 class="text-3xl font-bold text-foreground">FloAI</h1>
 			<a
 				href="/admin"
-				class="px-4 py-2 text-sm bg-white dark:bg-slate-800 rounded-lg shadow hover:shadow-md transition-shadow text-foreground"
+				class="px-4 py-2 text-sm font-medium bg-primary text-primary-foreground rounded-md hover:bg-primary-hover transition-colors shadow-sm hover:shadow-md"
 			>
 				📊 Admin Dashboard
 			</a>
