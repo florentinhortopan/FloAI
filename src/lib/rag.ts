@@ -1,4 +1,4 @@
-import { openai } from './openai';
+import { getOpenAIClient } from './openai';
 import { prisma } from './db';
 
 export interface KnowledgeDocument {
@@ -12,7 +12,8 @@ export interface KnowledgeDocument {
  * Generate embeddings for text using OpenAI
  */
 export async function generateEmbedding(text: string): Promise<number[]> {
-	const response = await openai.embeddings.create({
+	const openaiClient = getOpenAIClient();
+	const response = await openaiClient.embeddings.create({
 		model: 'text-embedding-3-small',
 		input: text.substring(0, 8000) // Limit to avoid token limits
 	});

@@ -4,7 +4,7 @@ import { retrieveRelevantKnowledge } from './rag';
 
 let openai: OpenAI | null = null;
 
-function getOpenAIClient(): OpenAI {
+export function getOpenAIClient(): OpenAI {
 	if (!env.OPENAI_API_KEY) {
 		throw new Error('OPENAI_API_KEY is not set');
 	}
