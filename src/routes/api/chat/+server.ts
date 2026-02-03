@@ -8,7 +8,17 @@ import { parseJobDescription } from '$lib/jobParser';
 
 export const POST: RequestHandler = async ({ request }) => {
 	try {
-		const { sessionId, intent, message, conversationHistory } = await request.json();
+		const body = await request.json();
+		const { sessionId, intent, message, conversationHistory } = body;
+		
+		// Validate intent is a string (not an event object)
+		if (typeof intent !== 'string') {
+			console.error('Invalid intent received:', intent);
+			return json(
+				{ error: 'Invalid intent', details: 'Intent must be a string value' },
+				{ status: 400 }
+			);
+		}
 
 		// Get or create profile (for now, using a default profile)
 		// TODO: Replace with actual user profile management

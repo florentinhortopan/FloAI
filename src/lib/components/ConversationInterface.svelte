@@ -76,12 +76,15 @@
 		isLoading = true;
 
 		try {
+			// Ensure intent is a string, not an object
+			const intentValue = typeof selectedIntent === 'string' ? selectedIntent : String(selectedIntent);
+			
 			const response = await fetch('/api/chat', {
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
 				body: JSON.stringify({
 					sessionId,
-					intent: selectedIntent,
+					intent: intentValue,
 					message: messageText,
 					conversationHistory: messages.slice(0, -1).map((m) => ({
 						role: m.role,

@@ -12,8 +12,9 @@
 		sessionId = crypto.randomUUID();
 	});
 
-	function handleIntentSelect(intent: Intent) {
-		selectedIntent = intent;
+	function handleIntentSelect(event: CustomEvent<Intent> | Intent) {
+		// Handle both direct value and CustomEvent
+		selectedIntent = event instanceof CustomEvent ? event.detail : event;
 	}
 
 	function handleBack() {
