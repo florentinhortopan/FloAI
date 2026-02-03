@@ -75,6 +75,13 @@
 		];
 	}
 
+	function handleSegueSelect(event: CustomEvent<string>) {
+		const segueText = event.detail;
+		// Set the segue text as input and send it
+		inputText = segueText;
+		sendMessage();
+	}
+
 	async function sendMessage() {
 		if (!inputText.trim() || isLoading) return;
 
@@ -231,13 +238,13 @@
 				</div>
 			</div>
 			<!-- Intent Selection CTAs -->
-			<IntentCTAs {currentIntent} on:select={handleIntentSelect} />
+			<IntentCTAs {currentIntent} variant="header" on:select={handleIntentSelect} />
 		</div>
 
 		<!-- Messages - High contrast background -->
 		<div class="h-[600px] overflow-y-auto p-6 space-y-4 bg-background">
 			{#each messages as message (message.id)}
-				<MessageBubble {message} />
+				<MessageBubble {message} on:segueSelect={handleSegueSelect} />
 				{#if message.role === 'assistant' && message.id === messages[0]?.id}
 					<!-- Show intent CTAs after welcome message -->
 					<div class="flex justify-center my-4">
@@ -262,7 +269,7 @@
 						for="file-upload"
 						class="px-4 py-2 text-sm font-medium bg-secondary text-secondary-foreground rounded-md hover:bg-secondary/80 cursor-pointer transition-colors border border-border"
 					>
-						{uploadingFile ? 'Uploading...' : '📎 Upload PDF/DOCX'}
+						{uploadingFile ? 'Uploading...' : 'Upload PDF/DOCX'}
 					</label>
 					<input
 						id="file-upload"

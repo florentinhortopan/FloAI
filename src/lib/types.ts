@@ -12,6 +12,7 @@ export interface Message {
 		strengths?: string[];
 		gaps?: string[];
 		recommendations?: string[];
+		segues?: string[]; // Suggested next prompts
 	};
 }
 

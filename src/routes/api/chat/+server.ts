@@ -71,6 +71,7 @@ export const POST: RequestHandler = async ({ request }) => {
 		});
 
 		// Check if message contains job description (URL, keywords, or long text)
+		let segues: string[] = [];
 		const isURL = message.startsWith('http://') || message.startsWith('https://');
 		const isJobDescription = isURL ||
 			message.toLowerCase().includes('job') ||
@@ -130,7 +131,7 @@ export const POST: RequestHandler = async ({ request }) => {
 				recommendations: matchResult.recommendations
 			};
 
-			response = await generateConversationResponse(
+			const conversationResponse = await generateConversationResponse(
 				conversationHistory.map((m: any) => ({
 					role: m.role,
 					content: m.content
@@ -138,15 +139,19 @@ export const POST: RequestHandler = async ({ request }) => {
 				intent,
 				conversationContext
 			);
+			response = conversationResponse.response;
+			segues = conversationResponse.segues || [];
 		} else {
 			// Regular conversation
-			response = await generateConversationResponse(
+			const conversationResponse = await generateConversationResponse(
 				conversationHistory.map((m: any) => ({
 					role: m.role,
 					content: m.content
 				})),
 				intent
 			);
+			response = conversationResponse.response;
+			segues = conversationResponse.segues || [];
 		}
 
 		// Save assistant message
@@ -155,7 +160,10 @@ export const POST: RequestHandler = async ({ request }) => {
 				conversationId: conversation.id,
 				role: 'assistant',
 				content: response,
-				metadata: jobMatchContext
+				metadata: {
+					...jobMatchContext,
+					segues: segues
+				}
 			}
 		});
 
@@ -176,7 +184,10 @@ export const POST: RequestHandler = async ({ request }) => {
 
 		return json({
 			response,
-			metadata: jobMatchContext,
+			metadata: {
+				...jobMatchContext,
+				segues: segues
+			},
 			audioUrl
 		});
 	} catch (error) {

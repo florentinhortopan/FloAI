@@ -99,14 +99,14 @@
 				showForm = true;
 				editingDoc = null;
 			}}
-			class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+			class="px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary-hover transition-colors"
 		>
 			Add Document
 		</button>
 	</div>
 
 	{#if showForm}
-		<div class="bg-white dark:bg-slate-800 p-6 rounded-lg shadow">
+		<div class="bg-card text-card-foreground p-6 rounded-lg shadow border border-border">
 			<h3 class="text-xl font-semibold mb-4">{editingDoc ? 'Edit' : 'Add'} Document</h3>
 			<div class="space-y-4">
 				<div>
@@ -139,7 +139,7 @@
 				<div class="flex gap-2">
 					<button
 						on:click={saveDocument}
-						class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+						class="px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary-hover transition-colors"
 					>
 						Save
 					</button>
@@ -161,7 +161,7 @@
 	{:else}
 		<div class="space-y-4">
 			{#each documents as doc}
-				<div class="bg-white dark:bg-slate-800 p-6 rounded-lg shadow">
+				<div class="bg-card text-card-foreground p-6 rounded-lg shadow border border-border">
 					<div class="flex justify-between items-start mb-2">
 						<div>
 							<h3 class="text-lg font-semibold">{doc.title}</h3>
@@ -172,13 +172,13 @@
 						<div class="flex gap-2">
 							<button
 								on:click={() => editDocument(doc)}
-								class="px-3 py-1 text-sm bg-blue-600 text-white rounded hover:bg-blue-700"
+								class="px-3 py-1 text-sm bg-primary text-primary-foreground rounded hover:bg-primary-hover"
 							>
 								Edit
 							</button>
 							<button
 								on:click={() => deleteDocument(doc.id)}
-								class="px-3 py-1 text-sm bg-red-600 text-white rounded hover:bg-red-700"
+								class="px-3 py-1 text-sm bg-destructive text-destructive-foreground rounded hover:opacity-90"
 							>
 								Delete
 							</button>

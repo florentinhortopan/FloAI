@@ -20,7 +20,7 @@
 				href="/admin"
 				class="px-4 py-2 text-sm font-medium bg-primary text-primary-foreground rounded-md hover:bg-primary-hover transition-colors shadow-sm hover:shadow-md"
 			>
-				📊 Admin Dashboard
+				Admin Dashboard
 			</a>
 		</div>
 		<ConversationInterface {sessionId} />

@@ -43,19 +43,19 @@
 	<div class="space-y-6">
 		<!-- Overview Cards -->
 		<div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-			<div class="bg-white dark:bg-slate-800 p-6 rounded-lg shadow">
+			<div class="bg-card text-card-foreground p-6 rounded-lg shadow border border-border">
 				<div class="text-sm text-muted-foreground mb-1">Total Conversations</div>
 				<div class="text-3xl font-bold">{analytics.overview.totalConversations}</div>
 			</div>
-			<div class="bg-white dark:bg-slate-800 p-6 rounded-lg shadow">
+			<div class="bg-card text-card-foreground p-6 rounded-lg shadow border border-border">
 				<div class="text-sm text-muted-foreground mb-1">Total Messages</div>
 				<div class="text-3xl font-bold">{analytics.overview.totalMessages}</div>
 			</div>
-			<div class="bg-white dark:bg-slate-800 p-6 rounded-lg shadow">
+			<div class="bg-card text-card-foreground p-6 rounded-lg shadow border border-border">
 				<div class="text-sm text-muted-foreground mb-1">Newsletter Subscribers</div>
 				<div class="text-3xl font-bold">{analytics.overview.newsletterSubscribers}</div>
 			</div>
-			<div class="bg-white dark:bg-slate-800 p-6 rounded-lg shadow">
+			<div class="bg-card text-card-foreground p-6 rounded-lg shadow border border-border">
 				<div class="text-sm text-muted-foreground mb-1">Avg Job Match Rate</div>
 				<div class="text-3xl font-bold">
 					{analytics.overview.avgJobMatchRate
@@ -66,7 +66,7 @@
 		</div>
 
 		<!-- Intent Breakdown -->
-		<div class="bg-white dark:bg-slate-800 p-6 rounded-lg shadow">
+		<div class="bg-card text-card-foreground p-6 rounded-lg shadow border border-border">
 			<h2 class="text-xl font-semibold mb-4">Conversations by Intent</h2>
 			<div class="grid grid-cols-2 md:grid-cols-4 gap-4">
 				{#each Object.entries(analytics.byIntent) as [intent, count]}
@@ -79,18 +79,18 @@
 		</div>
 
 		<!-- Export Actions -->
-		<div class="bg-white dark:bg-slate-800 p-6 rounded-lg shadow">
+		<div class="bg-card text-card-foreground p-6 rounded-lg shadow border border-border">
 			<h2 class="text-xl font-semibold mb-4">Export Data</h2>
 			<div class="flex gap-4">
 				<button
 					on:click={() => exportConversations('csv')}
-					class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+					class="px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary-hover transition-colors"
 				>
 					Export All Conversations (CSV)
 				</button>
 				<button
 					on:click={() => exportConversations('json')}
-					class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+					class="px-4 py-2 bg-success text-white rounded-lg hover:opacity-90 transition-colors border-2 border-success"
 				>
 					Export All Conversations (JSON)
 				</button>
@@ -98,7 +98,7 @@
 		</div>
 
 		<!-- Recent Activity -->
-		<div class="bg-white dark:bg-slate-800 p-6 rounded-lg shadow">
+		<div class="bg-card text-card-foreground p-6 rounded-lg shadow border border-border">
 			<h2 class="text-xl font-semibold mb-4">Recent Activity</h2>
 			<div class="space-y-2">
 				{#each analytics.recentActivity as activity}

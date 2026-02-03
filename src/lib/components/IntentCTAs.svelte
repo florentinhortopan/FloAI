@@ -3,29 +3,26 @@
 	import { createEventDispatcher } from 'svelte';
 
 	export let currentIntent: Intent | null = null;
+	export let variant: 'header' | 'default' = 'default'; // 'header' for use in primary header, 'default' for white background
 
 	const dispatch = createEventDispatcher<{ select: Intent }>();
 
-	const intents: Array<{ id: Intent; title: string; icon: string }> = [
+	const intents: Array<{ id: Intent; title: string }> = [
 		{
 			id: 'hire',
-			title: 'Hire Flo',
-			icon: '💼'
+			title: 'Hire Flo'
 		},
 		{
 			id: 'partner',
-			title: 'Partner',
-			icon: '🤝'
+			title: 'Partner'
 		},
 		{
 			id: 'fun',
-			title: 'Just Chat',
-			icon: '🎉'
+			title: 'Just Chat'
 		},
 		{
 			id: 'newsletter',
-			title: 'Newsletter',
-			icon: '📧'
+			title: 'Newsletter'
 		}
 	];
 
@@ -40,12 +37,15 @@
 		<button
 			on:click={() => selectIntent(intent.id)}
 			class="px-4 py-2 rounded-md text-sm font-semibold transition-all duration-200 border-2 {
-				currentIntent === intent.id
-					? 'bg-primary text-primary-foreground border-primary shadow-md'
-					: 'bg-card text-card-foreground border-border hover:border-primary hover:bg-primary/5'
+				variant === 'header'
+					? currentIntent === intent.id
+						? 'bg-white text-primary border-white shadow-md'
+						: 'bg-white/10 text-white border-white/30 hover:bg-white/20 hover:border-white/50'
+					: currentIntent === intent.id
+						? 'bg-primary text-primary-foreground border-primary shadow-md'
+						: 'bg-card text-card-foreground border-border hover:border-primary hover:bg-primary/5'
 			}"
 		>
-			<span class="mr-2">{intent.icon}</span>
 			{intent.title}
 		</button>
 	{/each}

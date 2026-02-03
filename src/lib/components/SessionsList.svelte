@@ -71,9 +71,9 @@
 		</div>
 	{:else}
 		<!-- Sessions Table -->
-		<div class="bg-white dark:bg-slate-800 rounded-lg shadow overflow-hidden">
+		<div class="bg-card text-card-foreground rounded-lg shadow overflow-hidden border border-border">
 			<table class="w-full">
-				<thead class="bg-slate-100 dark:bg-slate-700">
+				<thead class="bg-muted">
 					<tr>
 						<th class="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase">Session ID</th>
 						<th class="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase">Intent</th>

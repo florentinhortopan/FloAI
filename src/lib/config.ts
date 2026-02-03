@@ -5,7 +5,7 @@
 
 export const config = {
 	// Welcome message shown when user first arrives
-	welcomeMessage: "Hey! 👋 I'm Flo's AI assistant. What would you like to explore today?",
+	welcomeMessage: "Hey! I'm Flo's AI assistant. What would you like to explore today?",
 	
 	// Intent-specific messages shown when user selects an intent
 	intentMessages: {

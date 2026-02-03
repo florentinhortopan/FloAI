@@ -2,13 +2,19 @@ import OpenAI from 'openai';
 import { env } from '$env/dynamic/private';
 import { retrieveRelevantKnowledge } from './rag';
 
-if (!env.OPENAI_API_KEY) {
-	throw new Error('OPENAI_API_KEY is not set');
-}
+let openai: OpenAI | null = null;
 
-export const openai = new OpenAI({
-	apiKey: env.OPENAI_API_KEY
-});
+function getOpenAIClient(): OpenAI {
+	if (!env.OPENAI_API_KEY) {
+		throw new Error('OPENAI_API_KEY is not set');
+	}
+	if (!openai) {
+		openai = new OpenAI({
+			apiKey: env.OPENAI_API_KEY
+		});
+	}
+	return openai;
+}
 
 export interface JobMatchingContext {
 	profile: {
@@ -59,7 +65,8 @@ Provide a JSON response with:
   "recommendations": ["rec1", "rec2", ...]
 }`;
 
-	const completion = await openai.chat.completions.create({
+	const openaiClient = getOpenAIClient();
+	const completion = await openaiClient.chat.completions.create({
 		model: 'gpt-4-turbo-preview',
 		messages: [
 			{ role: 'system', content: systemPrompt },
@@ -87,11 +94,16 @@ export interface ConversationContext {
 	recommendations?: string[];
 }
 
+export interface ConversationResponse {
+	response: string;
+	segues?: string[]; // Suggested next prompts
+}
+
 export async function generateConversationResponse(
 	messages: Array<{ role: 'user' | 'assistant'; content: string }>,
 	intent: string,
 	context?: ConversationContext
-): Promise<string> {
+): Promise<ConversationResponse> {
 	// Retrieve relevant knowledge base documents using RAG
 	const lastUserMessage = messages.filter((m) => m.role === 'user').pop()?.content || '';
 	const relevantKnowledge = await retrieveRelevantKnowledge(lastUserMessage, 3);
@@ -124,6 +136,12 @@ Keep it casual and welcoming - like inviting someone to join a community.
 Use the knowledge base to explain Flo's projects, updates, and what subscribers can expect.`
 	};
 
+	// Retrieve segue guidelines from knowledge base
+	const segueGuidelines = await retrieveRelevantKnowledge('segue guidelines prompt suggestions', 1);
+	const segueGuidelineText = segueGuidelines.length > 0
+		? `\n\nSEGUE GUIDELINES:\n${segueGuidelines.map((kb) => kb.content).join('\n\n')}`
+		: '';
+
 	const basePersonality = `You are Flo's AI assistant. Your personality should be:
 - Conversational and natural (not robotic or overly formal)
 - Authentic and genuine (show real personality, not corporate speak)
@@ -135,7 +153,7 @@ Use the knowledge base to explain Flo's projects, updates, and what subscribers 
 
 ${personalityPrompts[intent] || personalityPrompts.fun}
 
-Use the knowledge base information provided to guide your responses authentically. Be conversational, natural, and helpful. If job matching context is provided, reference it naturally.${knowledgeContext}`;
+Use the knowledge base information provided to guide your responses authentically. Be conversational, natural, and helpful. If job matching context is provided, reference it naturally.${knowledgeContext}${segueGuidelineText}`;
 
 	const systemPrompt = basePersonality;
 
@@ -148,17 +166,48 @@ Use the knowledge base information provided to guide your responses authenticall
 			]
 		: [];
 
-	const completion = await openai.chat.completions.create({
+	const openaiClient = getOpenAIClient();
+	const completion = await openaiClient.chat.completions.create({
 		model: 'gpt-4-turbo-preview',
 		messages: [
 			{ role: 'system', content: systemPrompt },
 			...contextMessages,
-			...messages
+			...messages,
+			{
+				role: 'system',
+				content: `After your response, generate 2-4 short, engaging segue prompts (questions or statements) that would naturally continue the conversation. These should be:
+- Contextually relevant to what was just discussed
+- Natural conversation continuations
+- Short (5-10 words max)
+- Engaging and specific
+- Aligned with the current intent (${intent})
+
+Format your response as JSON:
+{
+  "response": "your main response text here",
+  "segues": ["suggested prompt 1", "suggested prompt 2", "suggested prompt 3"]
+}`
+			}
 		],
 		temperature: 0.9, // Increased for more natural, varied responses
 		presence_penalty: 0.3, // Encourage more diverse responses
-		frequency_penalty: 0.3 // Reduce repetition
+		frequency_penalty: 0.3, // Reduce repetition
+		response_format: { type: 'json_object' }
 	});
 
-	return completion.choices[0].message.content || '';
+	const content = completion.choices[0].message.content || '{}';
+	
+	try {
+		const parsed = JSON.parse(content);
+		return {
+			response: parsed.response || content,
+			segues: parsed.segues || []
+		};
+	} catch {
+		// Fallback if JSON parsing fails
+		return {
+			response: content,
+			segues: []
+		};
+	}
 }

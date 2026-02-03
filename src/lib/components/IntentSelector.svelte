@@ -4,33 +4,29 @@
 
 	const dispatch = createEventDispatcher<{ select: Intent }>();
 
-	const intents: Array<{ id: Intent; title: string; description: string; icon: string; color: string }> = [
+	const intents: Array<{ id: Intent; title: string; description: string; color: string }> = [
 		{
 			id: 'hire',
 			title: 'Hire Flo',
 			description: 'Looking for talent? Let me analyze how Flo matches your job requirements.',
-			icon: '💼',
 			color: 'from-blue-500 to-cyan-500'
 		},
 		{
 			id: 'partner',
 			title: 'Partner for a Project',
 			description: 'Explore collaboration opportunities and see how we can work together.',
-			icon: '🤝',
 			color: 'from-purple-500 to-pink-500'
 		},
 		{
 			id: 'fun',
 			title: 'Just Having Fun',
 			description: 'Let\'s chat! Ask me anything or just have a casual conversation.',
-			icon: '🎉',
 			color: 'from-orange-500 to-red-500'
 		},
 		{
 			id: 'newsletter',
 			title: 'Subscribe to Newsletter',
 			description: 'Stay updated with Flo\'s latest projects, insights, and updates.',
-			icon: '📧',
 			color: 'from-green-500 to-emerald-500'
 		}
 	];
@@ -44,14 +40,11 @@
 	{#each intents as intent (intent.id)}
 		<button
 			on:click={() => selectIntent(intent.id)}
-			class="group relative overflow-hidden rounded-2xl bg-white dark:bg-slate-800 p-8 shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:scale-105 hover:-translate-y-1"
+			class="group relative overflow-hidden rounded-2xl bg-card text-card-foreground p-8 shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:scale-105 hover:-translate-y-1 border border-border"
 		>
 			<div class="absolute inset-0 bg-gradient-to-br {intent.color} opacity-0 group-hover:opacity-10 transition-opacity duration-300"></div>
 			
 			<div class="relative z-10 space-y-4">
-				<div class="text-5xl mb-4 transform group-hover:scale-110 transition-transform duration-300">
-					{intent.icon}
-				</div>
 				<h3 class="text-2xl font-bold text-foreground">{intent.title}</h3>
 				<p class="text-muted-foreground">{intent.description}</p>
 				
