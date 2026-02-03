@@ -5,11 +5,17 @@
 	import { createSpeechRecognition } from '$lib/voice';
 	import MessageBubble from './MessageBubble.svelte';
 	import AudioControls from './AudioControls.svelte';
+	import IntentCTAs from './IntentCTAs.svelte';
+	import { config } from '$lib/config';
 
-	export let selectedIntent: Intent;
 	export let sessionId: string | null = null;
 
 	const dispatch = createEventDispatcher();
+
+	let selectedIntent: Intent | null = null;
+	
+	// Computed property for IntentCTAs component
+	$: currentIntent = selectedIntent;
 
 	let messages: Message[] = [];
 	let inputText = '';
@@ -43,18 +49,27 @@
 	});
 
 	async function sendWelcomeMessage() {
-		const welcomeMessages: Record<Intent, string> = {
-			hire: "Hi! I'm here to help you see how Flo matches your job requirements. You can paste a job description, share a job link, or upload a document. Let's get started!",
-			partner: "Hello! Excited to explore collaboration opportunities. Tell me about your project and let's see how we can work together!",
-			fun: "Hey there! 👋 Let's have some fun! What's on your mind?",
-			newsletter: "Thanks for your interest! I'd love to help you subscribe to Flo's newsletter. What would you like to know?"
-		};
-
 		messages = [
 			{
 				id: crypto.randomUUID(),
 				role: 'assistant',
-				content: welcomeMessages[selectedIntent],
+				content: config.welcomeMessage,
+				createdAt: new Date()
+			}
+		];
+	}
+
+	function handleIntentSelect(event: CustomEvent<Intent> | Intent) {
+		const intent = event instanceof CustomEvent ? event.detail : event;
+		selectedIntent = intent;
+		
+		// Add a message indicating intent change
+		messages = [
+			...messages,
+			{
+				id: crypto.randomUUID(),
+				role: 'assistant',
+				content: config.intentMessages[intent],
 				createdAt: new Date()
 			}
 		];
@@ -76,8 +91,8 @@
 		isLoading = true;
 
 		try {
-			// Ensure intent is a string, not an object
-			const intentValue = typeof selectedIntent === 'string' ? selectedIntent : String(selectedIntent);
+			// Use selected intent or default to 'fun' if none selected
+			const intentValue = selectedIntent || 'fun';
 			
 			const response = await fetch('/api/chat', {
 				method: 'POST',
@@ -202,41 +217,32 @@
 		}
 	}
 
-	function handleBack() {
-		dispatch('back');
-	}
 </script>
 
 <div class="max-w-4xl mx-auto">
 	<div class="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl overflow-hidden">
 		<!-- Header -->
-		<div class="bg-gradient-to-r from-blue-600 to-indigo-600 p-6 flex items-center justify-between">
-			<div class="flex items-center space-x-4">
-				<button
-					on:click={handleBack}
-					class="p-2 rounded-lg hover:bg-white/20 transition-colors"
-					aria-label="Back"
-				>
-					<svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-					</svg>
-				</button>
+		<div class="bg-gradient-to-r from-blue-600 to-indigo-600 p-6">
+			<div class="flex items-center justify-between mb-4">
 				<div>
-					<h2 class="text-xl font-bold text-white">
-						{selectedIntent === 'hire' ? '💼 Hire Flo' : ''}
-						{selectedIntent === 'partner' ? '🤝 Partner' : ''}
-						{selectedIntent === 'fun' ? '🎉 Let\'s Chat' : ''}
-						{selectedIntent === 'newsletter' ? '📧 Newsletter' : ''}
-					</h2>
+					<h2 class="text-xl font-bold text-white">FloAI</h2>
 					<p class="text-blue-100 text-sm">Session: {sessionId?.substring(0, 8)}</p>
 				</div>
 			</div>
+			<!-- Intent Selection CTAs -->
+			<IntentCTAs {currentIntent} on:select={handleIntentSelect} />
 		</div>
 
 		<!-- Messages -->
 		<div class="h-[600px] overflow-y-auto p-6 space-y-4 bg-slate-50 dark:bg-slate-900">
 			{#each messages as message (message.id)}
 				<MessageBubble {message} />
+				{#if message.role === 'assistant' && message.id === messages[0]?.id}
+					<!-- Show intent CTAs after welcome message -->
+					<div class="flex justify-center my-4">
+						<IntentCTAs {currentIntent} on:select={handleIntentSelect} />
+					</div>
+				{/if}
 			{/each}
 			{#if isLoading}
 				<div class="flex items-center space-x-2 text-muted-foreground">

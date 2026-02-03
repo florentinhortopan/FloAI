@@ -51,6 +51,14 @@ export const POST: RequestHandler = async ({ request }) => {
 					intent
 				}
 			});
+		} else {
+			// Update intent if it changed mid-conversation
+			if (conversation.intent !== intent) {
+				conversation = await prisma.conversation.update({
+					where: { sessionId },
+					data: { intent }
+				});
+			}
 		}
 
 		// Save user message
