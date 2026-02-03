@@ -1,0 +1,94 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+	provider = "prisma-client-js"
+}
+
+datasource db {
+	provider = "postgresql"
+	url      = env("DATABASE_URL")
+}
+
+model Profile {
+	id          String   @id @default(cuid())
+	name        String
+	email       String?  @unique
+	resumeText  String?  @db.Text
+	skills      String[] // Array of skills
+	experience  Json?    // Structured experience data
+	createdAt   DateTime @default(now())
+	updatedAt   DateTime @updatedAt
+	conversations Conversation[]
+}
+
+model Conversation {
+	id          String   @id @default(cuid())
+	profileId   String
+	profile     Profile  @relation(fields: [profileId], references: [id], onDelete: Cascade)
+	intent      String   // "hire", "partner", "fun", "newsletter"
+	sessionId   String   @unique // For tracking conversation sessions
+	createdAt   DateTime @default(now())
+	updatedAt   DateTime @updatedAt
+	messages    Message[]
+}
+
+model Message {
+	id             String       @id @default(cuid())
+	conversationId String
+	conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+	role           String       // "user" or "assistant"
+	content        String       @db.Text
+	audioUrl       String?      // URL to audio file if voice message
+	metadata       Json?        // Additional metadata (job description, matching rate, etc.)
+	createdAt      DateTime     @default(now())
+}
+
+model JobDescription {
+	id          String   @id @default(cuid())
+	url         String?  @unique // If from a link
+	title       String
+	company     String?
+	description String   @db.Text
+	rawContent  String?  @db.Text // Original format content
+	format      String   // "pdf", "docx", "txt", "url", "json"
+	processedAt DateTime @default(now())
+	createdAt   DateTime @default(now())
+}
+
+model KnowledgeBase {
+	id          String   @id @default(cuid())
+	title       String
+	content     String   @db.Text
+	category    String?  // "guidelines", "about", "skills", "experience", etc.
+	embedding   Json?    // Vector embeddings for semantic search
+	metadata    Json?    // Additional metadata
+	createdAt   DateTime @default(now())
+	updatedAt   DateTime @updatedAt
+}
+
+model NewsletterSubscriber {
+	id          String   @id @default(cuid())
+	email       String   @unique
+	name        String?
+	source      String?  // "conversation", "manual", etc.
+	conversationId String? // If subscribed via conversation
+	subscribedAt DateTime @default(now())
+	unsubscribedAt DateTime?
+	metadata    Json?    // Additional data from conversation
+}
+
+model SessionAnalytics {
+	id              String   @id @default(cuid())
+	sessionId       String   @unique
+	intent          String
+	duration        Int?     // Duration in seconds
+	messageCount    Int      @default(0)
+	hasJobMatch     Boolean  @default(false)
+	jobMatchRate    Float?
+	subscribed      Boolean  @default(false)
+	userAgent       String?
+	ipAddress       String?
+	createdAt       DateTime @default(now())
+	endedAt         DateTime?
+}
