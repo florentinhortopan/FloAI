@@ -11,15 +11,15 @@
 
 	const dispatch = createEventDispatcher();
 
-	let messages: Message[] = $state([]);
-	let inputText = $state('');
-	let isLoading = $state(false);
-	let isListening = $state(false);
+	let messages: Message[] = [];
+	let inputText = '';
+	let isLoading = false;
+	let isListening = false;
 	let recognition: SpeechRecognition | null = null;
 	let audioContext: AudioContext | null = null;
 	let currentAudio: HTMLAudioElement | null = null;
 	let fileInput: HTMLInputElement | null = null;
-	let uploadingFile = $state(false);
+	let uploadingFile = false;
 
 	onMount(() => {
 		recognition = createSpeechRecognition();

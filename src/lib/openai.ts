@@ -103,7 +103,7 @@ export async function generateConversationResponse(
 
 	const systemPrompt = `You are Flo's AI assistant. You're helping with: ${intent}.
 
-${intent === 'hire' ? 'Help potential employers understand Flo's value and match with job opportunities.' : ''}
+${intent === 'hire' ? 'Help potential employers understand Flo\'s value and match with job opportunities.' : ''}
 ${intent === 'partner' ? 'Help potential partners explore collaboration opportunities.' : ''}
 ${intent === 'fun' ? 'Be engaging, witty, and have fun conversations.' : ''}
 ${intent === 'newsletter' ? 'Help users subscribe and learn about Flo\'s updates.' : ''}

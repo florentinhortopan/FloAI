@@ -50,7 +50,6 @@ export const GET: RequestHandler = async () => {
 				metadata: {
 					path: ['matchingRate'],
 					not: null
-					}
 				}
 			},
 			select: {

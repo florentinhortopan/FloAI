@@ -2,7 +2,8 @@ import { json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 import { generateConversationResponse, analyzeJobMatch, type ConversationContext } from '$lib/openai';
 import { prisma } from '$lib/db';
-import { getVoiceConfig, synthesizeSpeech } from '$lib/voice';
+import { getVoiceConfig } from '$lib/voice.server';
+import { synthesizeSpeech } from '$lib/voice';
 import { parseJobDescription } from '$lib/jobParser';
 
 export const POST: RequestHandler = async ({ request }) => {

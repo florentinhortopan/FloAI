@@ -4,7 +4,7 @@
 	import SessionsList from './SessionsList.svelte';
 	import AnalyticsView from './AnalyticsView.svelte';
 
-	let activeTab = $state<'analytics' | 'sessions' | 'knowledge'>('analytics');
+	let activeTab: 'analytics' | 'sessions' | 'knowledge' = 'analytics';
 </script>
 
 <div class="container mx-auto px-4 py-8">

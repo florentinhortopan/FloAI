@@ -1,14 +1,14 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 
-	let documents = $state<any[]>([]);
-	let loading = $state(true);
-	let showForm = $state(false);
-	let editingDoc = $state<any>(null);
+	let documents: any[] = [];
+	let loading = true;
+	let showForm = false;
+	let editingDoc: any = null;
 
-	let formTitle = $state('');
-	let formContent = $state('');
-	let formCategory = $state('');
+	let formTitle = '';
+	let formContent = '';
+	let formCategory = '';
 
 	onMount(() => {
 		loadDocuments();

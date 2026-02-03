@@ -2,8 +2,8 @@
 	import { onMount } from 'svelte';
 	import AdminDashboard from '$lib/components/AdminDashboard.svelte';
 
-	let loading = $state(true);
-	let error = $state<string | null>(null);
+	let loading = true;
+	let error: string | null = null;
 
 	onMount(() => {
 		loading = false;

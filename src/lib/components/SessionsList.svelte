@@ -1,11 +1,11 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 
-	let sessions = $state<any[]>([]);
-	let loading = $state(true);
-	let page = $state(1);
-	let totalPages = $state(1);
-	let intentFilter = $state<string>('');
+	let sessions: any[] = [];
+	let loading = true;
+	let page = 1;
+	let totalPages = 1;
+	let intentFilter = '';
 
 	onMount(() => {
 		loadSessions();
@@ -45,9 +45,9 @@
 		}
 	}
 
-	$effect(() => {
+	$: if (page || intentFilter) {
 		loadSessions();
-	});
+	}
 </script>
 
 <div class="space-y-4">

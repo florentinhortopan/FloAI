@@ -1,8 +1,8 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 
-	let analytics = $state<any>(null);
-	let loading = $state(true);
+	let analytics: any = null;
+	let loading = true;
 
 	onMount(async () => {
 		try {
