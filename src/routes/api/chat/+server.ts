@@ -163,8 +163,44 @@ export const POST: RequestHandler = async ({ request }) => {
 		});
 	} catch (error) {
 		console.error('Chat API error:', error);
+		
+		// Log full error details for debugging
+		if (error instanceof Error) {
+			console.error('Error name:', error.name);
+			console.error('Error message:', error.message);
+			console.error('Error stack:', error.stack);
+		}
+		
+		// Check for specific error types
+		let errorMessage = 'Failed to process message';
+		let errorDetails = error instanceof Error ? error.message : 'Unknown error';
+		
+		if (error instanceof Error) {
+			// Database connection errors
+			if (error.message.includes('DATABASE_URL') || error.message.includes('Prisma')) {
+				errorMessage = 'Database connection error';
+				errorDetails = 'Please check your database configuration';
+			}
+			// OpenAI API errors
+			else if (error.message.includes('OPENAI_API_KEY') || error.message.includes('OpenAI')) {
+				errorMessage = 'OpenAI API error';
+				errorDetails = 'Please check your OpenAI API key configuration';
+			}
+			// Network errors
+			else if (error.message.includes('fetch') || error.message.includes('network')) {
+				errorMessage = 'Network error';
+				errorDetails = 'Please check your internet connection';
+			}
+		}
+		
 		return json(
-			{ error: 'Failed to process message', details: error instanceof Error ? error.message : 'Unknown error' },
+			{ 
+				error: errorMessage, 
+				details: errorDetails,
+				...(process.env.NODE_ENV === 'development' && {
+					stack: error instanceof Error ? error.stack : undefined
+				})
+			},
 			{ status: 500 }
 		);
 	}

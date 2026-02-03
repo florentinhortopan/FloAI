@@ -34,11 +34,15 @@ npm install
 Copy `env.example` to `.env` and fill in:
 - `OPENAI_API_KEY`: Your OpenAI API key (required)
 - `DATABASE_URL`: Your PostgreSQL connection string (required)
-- `ELEVENLABS_API_KEY`: Your ElevenLabs API key (optional, for voice synthesis)
-- `ELEVENLABS_VOICE_ID`: Your ElevenLabs voice ID (optional, default male voice)
-- `RESEND_API_KEY`: Your Resend API key (optional, for newsletter)
-- `RESEND_FROM_EMAIL`: Your verified email domain (optional)
+- `ELEVENLABS_API_KEY`: Your ElevenLabs API key (optional - can add later)
+- `ELEVENLABS_VOICE_ID`: Your ElevenLabs voice ID (optional - can add later)
+- `RESEND_API_KEY`: Your Resend API key (optional - can add later)
+- `RESEND_FROM_EMAIL`: Your verified email domain (optional - can add later)
 - `PUBLIC_APP_URL`: Your app URL (for production)
+
+**Note**: ElevenLabs and Resend keys are optional. The app will work without them:
+- Without ElevenLabs: Voice synthesis disabled, but text chat works
+- Without Resend: Newsletter subscriptions saved to DB, but no welcome emails sent
 
 3. **Set up database**:
 ```bash

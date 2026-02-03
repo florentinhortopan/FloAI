@@ -90,9 +90,27 @@
 				})
 			});
 
-			if (!response.ok) throw new Error('Failed to get response');
-
 			const data = await response.json();
+
+			// Check if API returned an error
+			if (!response.ok || data.error) {
+				const errorMessage = data.details || data.error || `HTTP ${response.status}: ${response.statusText}`;
+				console.error('API Error:', {
+					status: response.status,
+					statusText: response.statusText,
+					error: data.error,
+					details: data.details,
+					fullResponse: data
+				});
+				throw new Error(errorMessage);
+			}
+
+			// Check if response field exists
+			if (!data.response) {
+				console.error('Invalid API response:', data);
+				throw new Error('Invalid response from server');
+			}
+
 			const assistantMessage: Message = {
 				id: crypto.randomUUID(),
 				role: 'assistant',
@@ -109,12 +127,13 @@
 			}
 		} catch (error) {
 			console.error('Error sending message:', error);
+			const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
 			messages = [
 				...messages,
 				{
 					id: crypto.randomUUID(),
 					role: 'assistant',
-					content: 'Sorry, I encountered an error. Please try again.',
+					content: `Sorry, I encountered an error: ${errorMessage}. Please check the browser console for details or try again.`,
 					createdAt: new Date()
 				}
 			];
